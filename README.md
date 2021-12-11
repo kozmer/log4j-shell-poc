@@ -63,7 +63,7 @@ Scroll down to `8u20` and download the appropriate files for your operating syst
 
 **Note:** You do need to make an account to be able to download the package.
 
-Once you have downloaded and extracted the archive, you can find `java` and a few related binaries in `jdk1.8.0_20/bin`.
+Once you have downloaded and extracted the archive, you can find `java` and a few related binaries in `jdk1.8.0_20/bin`.<br>
 **Note:** Please make sure to extract the jdk folder into this repository with the same name in order for it to work.
 
 ```
