@@ -12,11 +12,6 @@ import org.apache.logging.log4j.Logger;
 
 @WebServlet(name = "loginServlet", value = "/login")
 public class LoginServlet extends HttpServlet {
-    private String message;
-
-    public void init() {
-        message = "Hello World!";
-    }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
