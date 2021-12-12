@@ -64,7 +64,9 @@ If you would like to further develop the project you can use intelj IDE which we
 Getting an old enough version of java.
 --------------------------------------
 
-The exploit only works with very old versions of java 8. We are unsure of exactly which java versions work and which don't so we have chosen to work with one of the earliest versions of java 8: `java-8u20`.
+The exploit only works on JDK versions up to `6u211`, `7u201`, `8u191`, and `11.0.1` as in later versions `com.sun.jndi.ldap.object.trustURLCodebase` is set to `false` meaning JNDI cannot load remote code using LDAP. (credit [LunaSec](https://www.lunasec.io/docs/blog/log4j-zero-day/) and [cnblogs/yyhuni](https://www.cnblogs.com/yyhuni/p/15088134.html))
+
+At the time of creating the exploit we were unsure of exactly which versions of java work and which don't so chose to work with one of the earliest versions of java 8: `java-8u20`.
 
 Oracle thankfully provides an archive for all previous java versions:<br>
 [https://www.oracle.com/java/technologies/javase/javase8-archive-downloads.html](https://www.oracle.com/java/technologies/javase/javase8-archive-downloads.html).<br>
