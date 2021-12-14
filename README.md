@@ -64,13 +64,13 @@ Listening on 0.0.0.0:1389
 Our vulnerable application
 --------------------------
 
-Running the application currently is easiest done in the payed version of intelj, but we plan on adding a Dockerfile in the future.
+Running the application currently is easiest done in the paid version of Intellij, but we plan on adding a Dockerfile in the future.
 
-If you would like to further develop the project you can use intelj IDE which we used to develop the project. We have also included a `.idea` folder where we have configuration files which make the job a bit easier. You can probably also use other IDE's too.
+If you would like to further develop the project you can use Intellij IDE which we used to develop the project. We have also included a `.idea` folder where we have configuration files which make the job a bit easier. You can probably also use other IDE's too.
 
 <br>
 
-Getting an old enough version of java.
+Getting the Java version.
 --------------------------------------
 
 At the time of creating the exploit we were unsure of exactly which versions of java work and which don't so chose to work with one of the earliest versions of java 8: `java-8u20`.
