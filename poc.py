@@ -83,7 +83,7 @@ public class Exploit {
   # start the web server
 
 
-  httpd = HTTPServer(('localhost', int(webport)), SimpleHTTPRequestHandler)
+  httpd = HTTPServer(('0.0.0.0', int(webport)), SimpleHTTPRequestHandler)
   httpd.serve_forever()
 
 
