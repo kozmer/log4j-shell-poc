@@ -30,6 +30,15 @@ Proof-of-concept (POC)
 
 As a PoC we have created a python file that automates the process. 
 
+
+#### Requirements:
+The following python packages are required by poc.pu
+* `colorama`
+* `argparse`
+
+#### Usage:
+
+
 * Start a netcat listener to accept reverse shell connection.<br>
 ```py
 nc -lvnp 9001
