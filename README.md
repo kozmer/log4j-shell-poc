@@ -14,13 +14,13 @@ https://user-images.githubusercontent.com/87979263/146113359-20663eaa-555d-4d60-
 
 <br>
 
-Ghidra:
+Ghidra (Old script):
 
 https://user-images.githubusercontent.com/87979263/145728478-b4686da9-17d0-4511-be74-c6e6fff97740.mp4
 
 <br>
 
-Minecraft PoC:
+Minecraft PoC (Old script):
 
 https://user-images.githubusercontent.com/87979263/145681727-2bfd9884-a3e6-45dd-92e2-a624f29a8863.mp4
 
