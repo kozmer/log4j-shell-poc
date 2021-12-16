@@ -81,8 +81,8 @@ public class Exploit {
   t1.start()
 
   # start the web server
-
-
+    
+  print(f"[+] Starting the Web server on port {webport} http://0.0.0.0:{webport}")
   httpd = HTTPServer(('0.0.0.0', int(webport)), SimpleHTTPRequestHandler)
   httpd.serve_forever()
 
