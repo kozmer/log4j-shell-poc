@@ -10,11 +10,8 @@ from http.server import HTTPServer, SimpleHTTPRequestHandler
 init(autoreset=True)
 
 def listToString(s):
-    str1 = ""
     try:
-      for ele in s:
-        str1 += ele
-      return str1
+      return "".join(s)
     except Exception as ex:
       parser.print_help()
       sys.exit()
