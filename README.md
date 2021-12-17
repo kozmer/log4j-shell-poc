@@ -32,10 +32,9 @@ As a PoC we have created a python file that automates the process.
 
 
 #### Requirements:
-The following python packages are required by poc.py
-* `colorama`
-* `argparse`
-
+```bash
+pip install -r requirements.txt
+```
 #### Usage:
 
 
