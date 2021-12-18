@@ -1,4 +1,3 @@
-import subprocess
 import argparse
 from colorama import Fore, init
 import subprocess
