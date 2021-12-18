@@ -1,5 +1,4 @@
 import subprocess
-import sys
 import argparse
 from colorama import Fore, init
 import subprocess
@@ -17,7 +16,7 @@ def listToString(s):
       return str1
     except Exception as ex:
       parser.print_help()
-      sys.exit()
+      raise SystemExit(1)
     
 
 def payload(userip , webport , lport):
@@ -92,7 +91,7 @@ def checkJavaAvailible():
   javaver = subprocess.call(['./jdk1.8.0_20/bin/java', '-version'], stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL)
   if(javaver != 0):
     print(Fore.RED + '[-] Java is not installed inside the repository ')
-    sys.exit()
+    raise SystemExit(1)
   
 
 def createLdapServer(userip, lport):
@@ -135,4 +134,4 @@ if __name__ == "__main__":
 
   except KeyboardInterrupt:
     print(Fore.RED + "user interupted the program.")
-    sys.exit(0)
+    raise SystemExit(0)
