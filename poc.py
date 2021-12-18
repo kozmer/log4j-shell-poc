@@ -70,7 +70,7 @@ public class Exploit {
     print(Fore.GREEN + '[+] Exploit java class created success')
 
   except Exception as e:
-    print(Fore.RED + f'[-] Something went wrong {e.toString()}')
+    print(Fore.RED + f'[-] Something went wrong {e}')
 
   checkJavaAvailible()
   print(Fore.GREEN + '[+] Setting up LDAP server\n')
