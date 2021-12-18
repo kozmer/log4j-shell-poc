@@ -59,7 +59,6 @@ public class Exploit {
   else:
     print(Fore.GREEN + '[+] Exploit java class created success')
 
-  checkJavaAvailible()
   print(Fore.GREEN + '[+] Setting up LDAP server\n')
 
   # create the LDAP server on new thread
@@ -117,6 +116,7 @@ if __name__ == "__main__":
 
     #print(args.userip)
 
+    checkJavaAvailible()
     payload(args.userip, args.webport, args.lport)
 
   except KeyboardInterrupt:
