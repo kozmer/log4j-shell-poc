@@ -7,17 +7,6 @@ from http.server import HTTPServer, SimpleHTTPRequestHandler
 
 init(autoreset=True)
 
-def listToString(s):
-    str1 = ""
-    try:
-      for ele in s:
-        str1 += ele
-      return str1
-    except Exception as ex:
-      parser.print_help()
-      raise SystemExit(1)
-    
-
 def payload(userip , webport , lport):
 
   genExploit = (
@@ -129,7 +118,7 @@ if __name__ == "__main__":
 
     #print(args.userip)
 
-    payload(listToString(args.userip), listToString(args.webport), listToString(args.lport))
+    payload(''.join(args.userip), ''.join(args.webport), ''.join(args.lport))
 
   except KeyboardInterrupt:
     print(Fore.RED + "user interupted the program.")
