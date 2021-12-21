@@ -106,7 +106,7 @@ def ldap_server(userip: str, lport: int) -> None:
 
 def main() -> None:
     init(autoreset=True)
-    print(Fore.BLUE+"""
+    print(Fore.BLUE + """
 [!] CVE: CVE-2021-44228
 [!] Github repo: https://github.com/kozmer/log4j-shell-poc
 """)
