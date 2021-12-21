@@ -77,8 +77,19 @@ If you would like to further develop the project you can use Intellij IDE which 
 
 <br>
 
-Getting the Java version.
+About the Java version.
 --------------------------------------
+
+This should probably work with most versions of Java.
+
+I have tested openjdk-8-jdk on Ubuntu 20 on a DigitalOcean Droplet. To set that up:
+```
+apt update
+apt install openjdk-8-jdk
+```
+
+If you still have problems, read on, otherwise skip to Disclaimer below.  
+
 
 At the time of creating the exploit we were unsure of exactly which versions of java work and which don't so chose to work with one of the earliest versions of java 8: `java-8u20`.
 
