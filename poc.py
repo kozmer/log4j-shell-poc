@@ -136,7 +136,7 @@ def main() -> None:
             raise SystemExit(1)
         payload(args.userip, args.webport, args.lport)
     except KeyboardInterrupt:
-        print(Fore.RED + "user interupted the program.")
+        print(Fore.RED + "user interrupted the program.")
         raise SystemExit(0)
 
 
