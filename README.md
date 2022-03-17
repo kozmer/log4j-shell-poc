@@ -83,7 +83,7 @@ Getting the Java version.
 At the time of creating the exploit we were unsure of exactly which versions of java work and which don't so chose to work with one of the earliest versions of java 8: `java-8u20`.
 
 ```
-> wget "https://drive.google.com/uc?export=download&id=1ZjUTMUs6dSekrwW-yBSG2kst2KPgha7F" -O jdk-8u20-linux-x64.tar.gz
+> https://drive.google.com/file/d/1ZjUTMUs6dSekrwW-yBSG2kst2KPgha7F/view?usp=sharing
 ```
 
 Once you have downloaded and extracted the archive, you can find `java` and a few related binaries in `jdk1.8.0_20/bin`.<br>
