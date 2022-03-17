@@ -82,12 +82,9 @@ Getting the Java version.
 
 At the time of creating the exploit we were unsure of exactly which versions of java work and which don't so chose to work with one of the earliest versions of java 8: `java-8u20`.
 
-Oracle thankfully provides an archive for all previous java versions:<br>
-[https://www.oracle.com/java/technologies/javase/javase8-archive-downloads.html](https://www.oracle.com/java/technologies/javase/javase8-archive-downloads.html).<br>
-Scroll down to `8u20` and download the appropriate files for your operating system and hardware.
-![Screenshot from 2021-12-11 00-09-25](https://user-images.githubusercontent.com/46561460/145655967-b5808b9f-d919-476f-9cbc-ed9eaff51585.png)
-
-**Note:** You do need to make an account to be able to download the package.
+```
+> wget "https://drive.google.com/uc?export=download&id=1ZjUTMUs6dSekrwW-yBSG2kst2KPgha7F" -O jdk-8u20-linux-x64.tar.gz
+```
 
 Once you have downloaded and extracted the archive, you can find `java` and a few related binaries in `jdk1.8.0_20/bin`.<br>
 **Note:** Please make sure to extract the jdk folder into this repository with the same name in order for it to work.
