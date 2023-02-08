@@ -1,0 +1,16 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="log4shell:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <properties id="maven-jee-properties">
+      <options>
+        <exploded>false</exploded>
+        <module>log4shell</module>
+        <packaging>war</packaging>
+        <unpackNestedArchives>false</unpackNestedArchives>
+      </options>
+    </properties>
+    <root id="archive" name="log4shell-1.0-SNAPSHOT.war">
+      <element id="artifact" artifact-name="log4shell:war exploded" />
+    </root>
+  </artifact>
+</component>
